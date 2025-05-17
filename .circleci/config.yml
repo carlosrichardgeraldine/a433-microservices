@@ -1,0 +1,40 @@
+version: 2.1
+jobs:
+  lint-dockerfile:
+    docker:
+      - image: cimg/base:2023.03
+    steps:
+      - checkout
+      - run:
+          name: Install hadolint
+          command: |
+            wget -O /tmp/hadolint https://github.com/hadolint/hadolint/releases/download/v2.12.0/hadolint-Linux-x86_64
+            chmod +x /tmp/hadolint
+            sudo mv /tmp/hadolint /usr/local/bin/
+      - run:
+          name: Lint Dockerfile
+          command: hadolint Dockerfile
+
+  build-app-karsajobs-ui:
+    docker:
+      - image: cimg/base:2023.03
+    steps:
+      - checkout
+      - setup_remote_docker:
+          version: 20.10.14
+      - run:
+          name: Build and Push Docker image
+          command: |
+            # Make the script executable
+            chmod +x build_push_image_karsajobs_ui.sh
+            # Run the script
+            ./build_push_image_karsajobs_ui.sh
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - lint-dockerfile
+      - build-app-karsajobs-ui:
+          requires:
+            - lint-dockerfile
