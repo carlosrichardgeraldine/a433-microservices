@@ -4,7 +4,7 @@
 
 # Variables
 GITHUB_USERNAME="carlosrichardgeraldine"
-IMAGE_NAME="karsajobs"
+IMAGE_NAME="karsajobs-ui"
 TAG="latest"
 
 echo "Building Docker image: ghcr.io/$GITHUB_USERNAME/$IMAGE_NAME:$TAG"
